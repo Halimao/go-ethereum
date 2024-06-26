@@ -206,13 +206,12 @@ func (s *stateObject) GetCommittedState(key common.Hash) common.Hash {
 		s.db.SnapshotStorageReads += time.Since(start)
 
 		if len(enc) > 0 {
-			var content []byte
-			_, content, _, err = rlp.Split(enc)
+			_, content, _, err := rlp.Split(enc)
 			if err != nil {
 				s.db.setError(err)
-			} else {
-				value.SetBytes(content)
+				return common.Hash{}
 			}
+			value.SetBytes(content)
 		}
 	}
 	// If the snapshot is unavailable or reading from it fails, load from the database.
